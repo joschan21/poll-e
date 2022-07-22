@@ -18,13 +18,6 @@ const VotedOrCreatorView: FC<VotedOrCreatorViewProps> = ({ id }) => {
   const path = `${process.env.VERCEL_URL || 'http://localhost:3000'}${router.asPath}`
   const { data, refetch } = trpc.useQuery(['poll.get-by-id', { id }])
 
-  if (!data) return <LoadingScreen />
-
-  const { isOwner, question, vote, votes } = data
-
-  if (!question) return <LoadingScreen />
-  if (!votes) return <LoadingScreen />
-
   const [indicateRefetch, setIndicateRefetch] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const [isCopyToClipboard, setIsCopyToClipboard] = useState(false)
@@ -54,6 +47,13 @@ const VotedOrCreatorView: FC<VotedOrCreatorViewProps> = ({ id }) => {
     }, 2500)
     return () => clearTimeout(timer)
   }, [isCopyToClipboard])
+
+  if (!data) return <LoadingScreen />
+
+  const { isOwner, question, vote, votes } = data
+
+  if (!question) return <LoadingScreen />
+  if (!votes) return <LoadingScreen />
 
   const amtVoters = votes.reduce((acc, obj) => acc + obj._count, 0)
   return (
