@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { HiX, HiXCircle } from 'react-icons/hi'
 import { BarLoader } from 'react-spinners'
@@ -18,7 +18,8 @@ const QuestionCreatorForm: FC<QuestionCreatorFormProps> = () => {
     handleSubmit,
     control,
     trigger,
-    formState: { errors },
+    clearErrors,
+    formState: { errors, isSubmitting, isSubmitted, isSubmitSuccessful },
   } = useForm<createQuestionValidatorType>({
     resolver: zodResolver(createQuestionValidator),
     defaultValues: { question: '', options: [{ label: '' }] },
@@ -30,6 +31,10 @@ const QuestionCreatorForm: FC<QuestionCreatorFormProps> = () => {
     control, // control props comes from useForm (optional: if you are using FormContext)
     name: 'options', // unique name for your Field Array
   })
+
+  useEffect(() => {
+    if (fields.length >= 2 && fields.length <= 25) clearErrors('options')
+  }, [fields])
 
   const { mutate: createPoll, isLoading } = trpc.useMutation('poll.create', {
     onSuccess: (data) => {
@@ -57,7 +62,7 @@ const QuestionCreatorForm: FC<QuestionCreatorFormProps> = () => {
                   )}
                   {errors?.options && <p className='text-sm text-red-600'>{errors.options.message}</p>}
                   {(errors?.options?.length ?? 0) > 0 && (
-                    <p className='text-sm text-red-600'>Option must contain at least 1 character(s)</p>
+                    <p className='text-sm text-red-600'>Options must contain at least 1 character(s)</p>
                   )}
                 </ul>
               </div>
@@ -119,9 +124,10 @@ const QuestionCreatorForm: FC<QuestionCreatorFormProps> = () => {
         </button>
         <button
           type='submit'
+          disabled={!noErrors}
           onClick={() => setSubmitted(true)}
           className='relative disabled:text-textcolor outline-none h-8 w-20 inline-flex items-center justify-center text-center no-underline leading-none whitespace-nowrap font-semibold rounded shrink-0 transition select-none overflow-hidden focus-ring hover:bg-secondary text-white border disabled:border-bordercolor border-blue-500 focus:border-white bg-primary text-sm'>
-          {submitted ? <BarLoader className='w-14' width={50} color='#3b82f6' /> : 'Create'}
+          {isSubmitSuccessful ? <BarLoader className='w-14' width={50} color='#3b82f6' /> : 'Create'}
         </button>
       </div>
     </form>
