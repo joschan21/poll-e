@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { FC } from 'react'
 import { BarLoader } from 'react-spinners'
+import LoadingScreen from '../components/common/LoadingScreen'
 import EmptyState from '../components/EmptyState'
 import { trpc } from '../utils/trpc'
 
@@ -9,12 +10,7 @@ const Home: FC = () => {
   // Hooks
   const { data: questions } = trpc.useQuery(['poll.get-all-by-token'])
 
-  if (!questions)
-    return (
-      <div className='absolute inset-0 flex justify-center items-center'>
-        <BarLoader width='150' color='#3b82f6' />
-      </div>
-    )
+  if (!questions) return <LoadingScreen />
 
   return (
     <>
