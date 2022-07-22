@@ -10,7 +10,7 @@ export function middleware(req: NextRequest) {
   const response = NextResponse.next()
   response.cookies.set('userToken', uuid())
 
-  return response
+  return NextResponse.redirect('/create')
 }
 
 export const config = {

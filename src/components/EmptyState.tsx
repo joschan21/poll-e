@@ -1,13 +1,11 @@
-import { Dispatch, FC, SetStateAction } from 'react'
-import { HiPlus } from 'react-icons/hi'
+import Link from 'next/link'
+import { FC } from 'react'
 
-interface EmptyStateProps {
-  setCreateNew: Dispatch<SetStateAction<boolean>>
-}
+interface EmptyStateProps {}
 
-const EmptyState: FC<EmptyStateProps> = ({ setCreateNew }) => {
+const EmptyState: FC<EmptyStateProps> = () => {
   return (
-    <div className='text-center'>
+    <div className='text-center border border-bordercolor bg-secondary rounded-lg p-12'>
       <svg
         className='mx-auto h-12 w-12 text-gray-300'
         fill='none'
@@ -25,12 +23,11 @@ const EmptyState: FC<EmptyStateProps> = ({ setCreateNew }) => {
       <h3 className='mt-2 text-sm font-medium text-white'>No polls</h3>
       <p className='mt-1 text-sm text-textcolor'>Get started by creating a new poll.</p>
       <div className='mt-6'>
-        <button
-          type='button'
-          onClick={() => setCreateNew(true)}
-          className='inline-flex items-center px-4 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
-          Create new poll
-        </button>
+        <Link href='/create'>
+          <a className='relative py-2 px-3.5 inline-flex items-center justify-center text-center no-underline leading-none whitespace-nowrap font-semibold rounded shrink-0 transition select-none overflow-hidden focus-ring hover:bg-secondary text-white border border-bordercolor bg-primary text-sm'>
+            Create new
+          </a>
+        </Link>
       </div>
     </div>
   )

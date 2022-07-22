@@ -1,31 +1,25 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { FC, useState } from 'react'
+import { FC } from 'react'
+import { BarLoader } from 'react-spinners'
 import EmptyState from '../components/EmptyState'
-import QuestionCreatorModal from '../components/QuestionCreatorModal'
 import { trpc } from '../utils/trpc'
 
 const Home: FC = () => {
   // Local State Definitions
-  const [createNew, setCreateNew] = useState(false)
 
   // Hooks
   const router = useRouter()
 
-  const { mutate, data } = trpc.useMutation('question.create', {
-    onSuccess: (data) => {
-      router.push(`/question/${data.id}`)
-      setCreateNew(false)
-    },
-    onError: () => console.log('error'),
-  })
+  const { data: questions, isLoading } = trpc.useQuery(['poll.get-all-by-token'])
 
-  const { data: questions, isLoading } = trpc.useQuery(['question.get-all-by-token'])
-
-  if (!questions) return <p>idiot</p>
-
-  if (isLoading) return <p>Loading...</p>
+  if (!questions)
+    return (
+      <div className='absolute inset-0 flex justify-center items-center'>
+        <BarLoader width='150' color='#3b82f6' />
+      </div>
+    )
 
   return (
     <>
@@ -35,10 +29,10 @@ const Home: FC = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <main className='bg-primary min-h-screen'>
+      <main className='bg-primary'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <p>Your recent polls:</p>
-          <div className='flex flex-col gap-3 my-6'>
+          <p className='text-2xl text-white py-10'>Your recent polls:</p>
+          <div className='flex flex-col gap-3 mb-6'>
             {questions?.map((question) => (
               <Link href={`/poll/${question.id}`} key={question.id}>
                 <a>
@@ -47,10 +41,12 @@ const Home: FC = () => {
               </Link>
             ))}
           </div>
-          {questions?.length === 0 && <EmptyState setCreateNew={setCreateNew} />}
-          <Link href='/create' className='underline'>
-            <a className='text-white'>Create a new one!</a>
-          </Link>
+          {questions.length === 0 && <EmptyState />}
+          {questions.length !== 0 && (
+            <Link href='/create' className='underline'>
+              <a className='text-white'>Create a new one!</a>
+            </Link>
+          )}
         </div>
       </main>
     </>

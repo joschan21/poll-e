@@ -1,10 +1,10 @@
-import { Question, Vote } from '@prisma/client'
+import { Question } from '@prisma/client'
 import { z } from 'zod'
 import { createQuestionValidator } from '../../shared/create-question-validator'
 import { options } from '../../shared/typings'
 import { createRouter } from './context'
 
-export const questionRouter = createRouter()
+export const pollRouter = createRouter()
   .mutation('create', {
     input: createQuestionValidator,
     async resolve({ ctx, input }) {
@@ -51,16 +51,12 @@ export const questionRouter = createRouter()
 
       const typedQuestion = question as typedJson | null
 
-      console.log('typedQuestion?', typedQuestion)
-
       const myVote = await ctx.prisma.vote.findFirst({
         where: {
           questionId: input.id,
           voterToken: ctx.token,
         },
       })
-
-      console.log('myVote', myVote)
 
       const rest = {
         question: typedQuestion,
