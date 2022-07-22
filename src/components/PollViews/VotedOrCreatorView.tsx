@@ -74,6 +74,7 @@ const VotedOrCreatorView: FC<VotedOrCreatorViewProps> = ({ id }) => {
                       <HiLink className='h-[18px] w-[18px] text-gray-400' aria-hidden='true' />
                     </div>
                     <input
+                      readOnly
                       onFocus={(e) => e.target.select()}
                       value={path}
                       className='focus:ring-indigo-500 bg-[#242424] outline-none truncate text-textcolor focus:border-indigo-500 block w-full rounded-none rounded-l-md pl-10 text-sm border-gray-300'
