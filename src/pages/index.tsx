@@ -1,18 +1,13 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { BarLoader } from 'react-spinners'
 import EmptyState from '../components/EmptyState'
 import { trpc } from '../utils/trpc'
 
 const Home: FC = () => {
-  // Local State Definitions
-
   // Hooks
-  const router = useRouter()
-
-  const { data: questions, isLoading } = trpc.useQuery(['poll.get-all-by-token'])
+  const { data: questions } = trpc.useQuery(['poll.get-all-by-token'])
 
   if (!questions)
     return (
