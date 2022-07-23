@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { trpc } from '../utils/trpc'
 import LoadingScreen from './common/LoadingScreen'
+import NotVotedMultipleView from './PollViews/NotVotedMultipleView'
 import NotVotedView from './PollViews/NotVotedView'
 import VotedOrCreatorView from './PollViews/VotedOrCreatorView'
 
@@ -10,15 +11,17 @@ interface PollPageProps {
 
 const PollPage: FC<PollPageProps> = ({ id }) => {
   const { data } = trpc.useQuery(['poll.get-by-id', { id }])
-
   if (!data) return <LoadingScreen />
 
-  const { isOwner, question, vote } = data
+  const { isOwner, question, myVotes } = data
+  const hasVoted = myVotes?.length > 0
 
   if (!question) return <LoadingScreen />
 
-  if (isOwner) return <VotedOrCreatorView id={id} />
-  if (vote) return <VotedOrCreatorView id={id} />
+  // Order matters!
+  if (isOwner || hasVoted) return <VotedOrCreatorView id={id} />
+  if (question.allowMultipleChoices) return <NotVotedMultipleView id={id} />
+
   return <NotVotedView id={id} />
 }
 

@@ -30,13 +30,19 @@
   transform: rotate(3deg) translate(0px, -4px);
 }
 
-/* Remove these to get rid of the spinner */
 #nprogress .spinner {
-  display: block;
-  position: fixed;
-  z-index: 1031;
-  top: 15px;
-  right: 15px;
+  display: none;
+}
+
+/* Remove these to get rid of the spinner */
+@media screen and (min-width: 640px) {
+  #nprogress .spinner {
+    display: block;
+    position: fixed;
+    z-index: 1031;
+    top: 15px;
+    right: 15px;
+  }
 }
 
 #nprogress .spinner-icon {

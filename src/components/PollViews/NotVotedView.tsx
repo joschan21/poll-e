@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { HiArrowRight } from 'react-icons/hi'
 import { trpc } from '../../utils/trpc'
 import LoadingScreen from '../common/LoadingScreen'
@@ -8,7 +8,7 @@ interface NotVotedViewProps {
 }
 
 const NotVotedView: FC<NotVotedViewProps> = ({ id }) => {
-  const { data, isLoading, error, isError, refetch } = trpc.useQuery(['poll.get-by-id', { id }])
+  const { data } = trpc.useQuery(['poll.get-by-id', { id }])
   const { mutate: voteFor } = trpc.useMutation('poll.vote', {
     onSuccess: () => {
       window.location.reload()
@@ -17,7 +17,7 @@ const NotVotedView: FC<NotVotedViewProps> = ({ id }) => {
 
   if (!data) return <LoadingScreen />
 
-  const { isOwner, question, vote, votes } = data
+  const { question } = data
 
   if (!question) return <LoadingScreen />
 

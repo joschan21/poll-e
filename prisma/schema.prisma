@@ -12,7 +12,7 @@ datasource db {
     referentialIntegrity = "prisma"
 }
 
-model Question {
+model Poll {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
 
@@ -21,6 +21,8 @@ model Question {
     userToken String
 
     options Json
+
+    allowMultipleChoices Boolean @default(false)
 
     votes Vote[]
 
@@ -35,10 +37,10 @@ model Vote {
 
     voterToken String @db.VarChar(255)
 
-    Question   Question @relation(fields: [questionId], references: [id])
-    questionId String
+    Poll   Poll   @relation(fields: [pollId], references: [id])
+    pollId String
 
-    @@unique([voterToken, questionId])
+    @@unique([voterToken, pollId, choice])
     @@index([voterToken])
-    @@index([questionId])
+    @@index([pollId])
 }

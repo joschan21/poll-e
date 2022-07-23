@@ -1,4 +1,5 @@
 import { Disclosure } from '@headlessui/react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
 
@@ -13,16 +14,18 @@ const Navbar: FC<NavbarProps> = ({}) => {
             <div className='-ml-2 mr-2 flex items-center md:hidden'></div>
             <Link href='/'>
               <a className='flex-shrink-0 flex items-center'>
-                <img
-                  className='block lg:hidden h-8 w-auto'
-                  src='https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg'
-                  alt='Workflow'
-                />
-                <img
+                <div className='relative block lg:hidden h-8 w-8'>
+                  <Image src='/logo-without-text.png' layout='fill' objectFit='contain' />
+                </div>
+                <div className='relative hidden lg:block h-8 w-16'>
+                  <Image src='/logo-text.png' layout='fill' objectFit='contain' />
+                </div>
+
+                {/* <img
                   className='hidden lg:block h-8 w-auto'
                   src='https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg'
                   alt='Workflow'
-                />
+                /> */}
               </a>
             </Link>
             <div className='hidden md:ml-6 md:flex md:items-center md:space-x-4'></div>

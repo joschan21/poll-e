@@ -13,6 +13,7 @@ export const createQuestionValidator = z.object({
     )
     .min(2, { message: 'Poll must contain at least 2 option(s)' })
     .max(25, { message: 'Poll must contain at most 25 option(s)' }),
+  allowMultipleChoices: z.boolean(),
 })
 
 export type createQuestionValidatorType = z.infer<typeof createQuestionValidator>

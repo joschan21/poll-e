@@ -17,5 +17,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('@tailwindcss/forms')({ strategy: 'class' })],
+  plugins: [require('@tailwindcss/forms')],
 }
