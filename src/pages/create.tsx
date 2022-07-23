@@ -8,7 +8,7 @@ const create: FC<createProps> = ({}) => {
   return (
     <>
       <Head>
-        <title>Poll-E | New poll</title>
+        <title>poll·e | Create new</title>
         <meta name='description' content='Poll-E' />
         <link rel='icon' href='/favicon.ico' />
       </Head>

@@ -58,7 +58,7 @@ export default function QuestionPage(props: InferGetServerSidePropsType<typeof g
   return (
     <>
       <Head>
-        <title>{`Poll-E | ${data.question.question}`}</title>
+        <title>{`poll·e | ${data.question.question}`}</title>
         <meta property='og:url' content='poll-e.com' />
         <meta property='og:type' content='website' />
         {/* <meta property='fb:app_id' content='your fb app id' /> */}

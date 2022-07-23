@@ -15,7 +15,7 @@ const Home: FC = () => {
   return (
     <>
       <Head>
-        <title>Poll-E | Online poll service</title>
+        <title>poll·e | Poll in seconds</title>
         <meta name='description' content='Poll-E' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
