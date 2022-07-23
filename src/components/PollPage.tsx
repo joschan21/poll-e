@@ -1,18 +1,16 @@
 import { FC } from 'react'
-import { trpc } from '../utils/trpc'
+import { inferQueryOutput } from '../utils/trpc'
 import LoadingScreen from './common/LoadingScreen'
 import NotVotedMultipleView from './PollViews/NotVotedMultipleView'
 import NotVotedView from './PollViews/NotVotedView'
 import VotedOrCreatorView from './PollViews/VotedOrCreatorView'
 
 interface PollPageProps {
+  data: inferQueryOutput<'poll.get-by-id'>
   id: string
 }
 
-const PollPage: FC<PollPageProps> = ({ id }) => {
-  const { data } = trpc.useQuery(['poll.get-by-id', { id }])
-  if (!data) return <LoadingScreen />
-
+const PollPage: FC<PollPageProps> = ({ data, id }) => {
   const { isOwner, question, myVotes } = data
   const hasVoted = myVotes?.length > 0
 
