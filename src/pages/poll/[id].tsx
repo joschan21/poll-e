@@ -1,30 +1,33 @@
-import { NextPage } from 'next'
+import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import LoadingScreen from '../../components/common/LoadingScreen'
 import PollPage from '../../components/PollPage'
 import { inferQueryOutput, trpc } from '../../utils/trpc'
+import { createSSGHelpers } from '@trpc/react/ssg'
+import superjson from 'superjson'
+import { appRouter } from '../../server/router'
+import { createContext } from '../../server/router/context'
 
-export const getServerSideProps = async () => {
-  const { query } = useRouter()
-  const { id } = query
+export async function getServerSideProps(context: GetServerSidePropsContext<{ id: string }>) {
+  const ssg = createSSGHelpers({
+    router: appRouter,
+    ctx: createContext(),
+    transformer: superjson,
+  })
+  const id = context.params?.id as string
 
-  if (typeof id == 'string') {
-    const { data } = trpc.useQuery(['poll.get-by-id', { id }])
+  // Prefetch `poll.get-by-id`
+  await ssg.fetchQuery('poll.get-by-id', {
+    id,
+  })
 
-    return {
-      props: {
-        data,
-        id,
-      },
-    }
-  } else {
-    return {
-      props: {
-        undefined,
-        id,
-      },
-    }
+  // Make sure to return { props: { trpcState: ssg.dehydrate() } }
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      id,
+    },
   }
 }
 
@@ -33,7 +36,8 @@ interface QuestionPageProps {
   id: string
 }
 
-const QuestionPage: NextPage<QuestionPageProps> = ({ data, id }) => {
+const QuestionPage: NextPage<QuestionPageProps> = ({ id }) => {
+  const { data } = trpc.useQuery(['poll.get-by-id', { id }])
   if (!data) return <LoadingScreen />
 
   return (
