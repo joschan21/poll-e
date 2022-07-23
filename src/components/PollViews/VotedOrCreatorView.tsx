@@ -15,8 +15,7 @@ interface VotedOrCreatorViewProps {
 const VotedOrCreatorView: FC<VotedOrCreatorViewProps> = ({ id }) => {
   const router = useRouter()
 
-  let path = `http://localhost:3000${router.asPath}`
-  if (process.env.VERCEL_URL) path = `https://${process.env.VERCEL_URL}${router.asPath}`
+  const path = `https://poll-e.com${router.asPath}`
   const { data, refetch } = trpc.useQuery(['poll.get-by-id', { id }])
 
   const [indicateRefetch, setIndicateRefetch] = useState(false)
@@ -177,17 +176,18 @@ const VotedOrCreatorView: FC<VotedOrCreatorViewProps> = ({ id }) => {
                 })}
               </ul>
             </div>
-            {/* {isOwner ? (
+            {isOwner && (
               <p className='text-sm font-medium text-textcolor'>
                 You created this poll{' '}
                 <span className='text-blue-500'>{formatDistance(question.createdAt, Date.now())}</span> ago.
               </p>
-            ) : (
+            )}
+            {myVotes && myVotes.length === 1 && (
               <p className='text-sm font-medium text-textcolor'>
                 You voted for &quot;
-                <span className='text-blue-500'>{question.options[vote!.choice]?.label}</span>&quot;.
+                <span className='text-blue-500'>{question.options[myVotes[0]!.choice]?.label}</span>&quot;.
               </p>
-            )} */}
+            )}
           </main>
         </div>
       </div>
