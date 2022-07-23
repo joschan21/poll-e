@@ -61,12 +61,13 @@ export default function QuestionPage(props: InferGetServerSidePropsType<typeof g
         <title>{`Poll-E | ${data.question.question}`}</title>
         <meta property='og:url' content='poll-e.com' />
         <meta property='og:type' content='website' />
-        <meta property='fb:app_id' content='your fb app id' />
-        <meta property='og:title' content={`poll-e | fast & easy online polling`} />
-        <meta name='twitter:card' content='summary' />
+        {/* <meta property='fb:app_id' content='your fb app id' /> */}
+        <meta property='og:title' content={`Vote now on poll·e`} />
+        {/* <meta name='twitter:card' content='summary' /> */}
         <meta property='og:description' content={`${data.question.question}`} />
-        <meta property='og:image' content='/logo-text.png' />
+        <meta property='og:image' content='/logo-og.png' />
       </Head>
+
       <PollPage data={data} id={id} />
     </>
   )
