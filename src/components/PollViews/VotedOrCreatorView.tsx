@@ -15,7 +15,8 @@ interface VotedOrCreatorViewProps {
 const VotedOrCreatorView: FC<VotedOrCreatorViewProps> = ({ id }) => {
   const router = useRouter()
 
-  const path = `http://localhost:3000${router.asPath}`
+  let path = `http://localhost:3000${router.asPath}`
+  if (process.env.VERCEL_URL) path = `https://${process.env.VERCEL_URL}${router.asPath}`
   const { data, refetch } = trpc.useQuery(['poll.get-by-id', { id }])
 
   const [indicateRefetch, setIndicateRefetch] = useState(false)
